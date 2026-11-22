@@ -254,6 +254,11 @@ with tab2:
         surround=colour.appearance.cam16.VIEWING_CONDITIONS_CAM16[surround_val]
     )
 
+    # Compute Cartesian coordinates a_c, b_c
+    h_rad = np.radians(cam.h)
+    a_c = float(cam.C * np.cos(h_rad))
+    b_c = float(cam.C * np.sin(h_rad))
+
     st.markdown("---")
     st.markdown("#### 3. Computed Perceptual Correlates (CAM16)")
 
@@ -261,11 +266,11 @@ with tab2:
     with col_res1:
         st.metric("Lightness (J)", f"{cam.J:.2f} / 100")
         st.metric("Brightness (Q)", f"{cam.Q:.2f}")
-        st.metric("Cartesian a_C", f"{cam.a:.2f}")
+        st.metric("Cartesian a_C", f"{a_c:.2f}")
     with col_res2:
         st.metric("Chroma (C)", f"{cam.C:.2f}")
         st.metric("Colourfulness (M)", f"{cam.M:.2f}")
-        st.metric("Cartesian b_C", f"{cam.b:.2f}")
+        st.metric("Cartesian b_C", f"{b_c:.2f}")
     with col_res3:
         st.metric("Hue Angle (h)", f"{cam.h:.2f}°")
         st.metric("Hue Quadrature (H)", f"{cam.H:.2f}")
