@@ -106,7 +106,23 @@ cmake --build build
 
 ---
 
-## 6. Experimental Benchmark Summary
+## 6. Interactive Web Deployment (Live Evaluator Dashboard)
+An interactive web application is deployed via Streamlit, allowing evaluators to interact with the CAM16 model, view real-time color conversions, trigger live C++ hardware benchmarks, and explore speedup charts directly in their browser.
+
+### One-Click Launch:
+Double-click `run_app.bat` or run:
+```powershell
+.\run_app.bat
+```
+*(Or manually in PowerShell)*:
+```powershell
+python -m streamlit run app.py
+```
+This automatically starts the local web server and opens the dashboard at `http://localhost:8501`.
+
+---
+
+## 7. Experimental Benchmark Summary
 
 ### Single-Core Execution Across Workloads (AMD Ryzen 7 7435HS)
 | Workload Size | Engine | Median Time (ms) | Throughput (Million samples/sec) | Speedup vs. Scalar |
