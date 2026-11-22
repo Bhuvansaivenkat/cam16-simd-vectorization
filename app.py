@@ -241,11 +241,6 @@ with tab2:
     with col_viewing:
         st.markdown("#### 2. Viewing Environment Parameters")
         surround_choice = st.selectbox("Surround Condition", ["Average (Monitor/Standard)", "Dim (Home Theater)", "Dark (Cinema)"])
-        surround_dict = {
-            "Average (Monitor/Standard)": colour.appearance.CAM16_Specification(surround=colour.appearance.cam16.VIEWING_CONDITIONS_CAM16['Average']),
-            "Dim (Home Theater)": colour.appearance.CAM16_Specification(surround=colour.appearance.cam16.VIEWING_CONDITIONS_CAM16['Dim']),
-            "Dark (Cinema)": colour.appearance.CAM16_Specification(surround=colour.appearance.cam16.VIEWING_CONDITIONS_CAM16['Dark'])
-        }
         L_A = st.slider("Adapting Luminance L_A (cd/m²)", min_value=4.0, max_value=250.0, value=64.0, step=4.0)
         Y_b = st.slider("Background Luminance Factor Y_b (%)", min_value=5.0, max_value=80.0, value=20.0, step=5.0)
 
