@@ -303,6 +303,57 @@ with tab2:
         st.metric("Hue Quadrature (H)", f"{cam.H:.2f}")
         st.metric("Saturation (s)", f"{cam.s:.2f}")
 
+    st.markdown("---")
+    st.markdown("#### 4. 🎨 Saturation Visualizer & Perceived Color Preview")
+    st.write(r"In CAM16, Saturation is defined as $s = 100 \sqrt{M / Q}$ (Colourfulness relative to Brightness). You can dynamically adjust the saturation level below to see the resulting color patch computed via inverse CAM16:")
+
+    col_sat_ctrl, col_swatch_orig, col_swatch_mod = st.columns([2, 1, 1])
+
+    with col_sat_ctrl:
+        sat_multiplier = st.slider("Adjust Saturation (%)", min_value=0, max_value=200, value=100, step=5,
+                                   help="Scale Chroma/Saturation from 0% (grayscale at same lightness) to 200% (vibrant).")
+        effective_s = cam.s * np.sqrt(sat_multiplier / 100.0) if sat_multiplier > 0 else 0.0
+        st.caption(f"Effective Saturation: **{effective_s:.2f}** (Base CAM16 $s = {cam.s:.2f}$)")
+
+    # Compute modified color via inverse CAM16
+    scale_factor = sat_multiplier / 100.0
+    cam_mod = colour.appearance.cam16.CAM_Specification_CAM16(
+        J=cam.J,
+        C=cam.C * scale_factor,
+        h=cam.h,
+        s=effective_s,
+        Q=cam.Q,
+        M=cam.M * scale_factor,
+        H=cam.H
+    )
+    try:
+        xyz_mod = colour.appearance.CAM16_to_XYZ(cam_mod, [95.047, 100.0, 108.883], L_A, Y_b)
+        rgb_mod = np.clip(colour.XYZ_to_sRGB(xyz_mod / 100.0), 0.0, 1.0)
+        mod_hex = "#{:02x}{:02x}{:02x}".format(int(rgb_mod[0] * 255), int(rgb_mod[1] * 255), int(rgb_mod[2] * 255))
+    except Exception:
+        mod_hex = color_pick
+        rgb_mod = np.array([r, g, b])
+
+    with col_swatch_orig:
+        st.markdown("**Original Stimulus Color**")
+        lum_orig = r * 0.299 + g * 0.587 + b * 0.114
+        text_color_orig = "white" if lum_orig < 0.5 else "black"
+        st.markdown(f"""
+        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid #CBD5E1; display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold;">
+            {color_pick} (100%)
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col_swatch_mod:
+        st.markdown(f"**Adjusted Color ({sat_multiplier}%)**")
+        lum_mod = rgb_mod[0] * 0.299 + rgb_mod[1] * 0.587 + rgb_mod[2] * 0.114
+        text_color_mod = "white" if lum_mod < 0.5 else "black"
+        st.markdown(f"""
+        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid #CBD5E1; display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold;">
+            {mod_hex}
+        </div>
+        """, unsafe_allow_html=True)
+
     st.markdown("""
     > [!TIP]
     > **AVX2 SIMD Execution Path:** In the manual AVX2 SIMD engine, this transformation is processed across 8 pixels simultaneously inside 256-bit `ymm` registers. Fractional power evaluations ($x^{0.42}$) use Cody-Waite range reduction and 9th-degree minimax polynomials evaluated strictly through chained `_mm256_fmadd_ps` hardware instructions.
