@@ -11,112 +11,486 @@ from PIL import Image
 # Page Configuration
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="CAM16 SIMD Vectorization (COA Research)",
+    page_title="CAM16 SIMD Vectorization | AMD Ryzen Research Lab",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # -----------------------------------------------------------------------------
-# Custom Styling
+# Advanced Microarchitecture & HPC Dashboard CSS Stylesheet
 # -----------------------------------------------------------------------------
-st.markdown("""
+st.markdown(r"""
 <style>
-    .main-title {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #1E3A8A;
-        margin-bottom: 0.2rem;
+    /* Google Fonts Import: Inter & JetBrains Mono */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    /* Global Theme & Deep Silicon Canvas Background */
+    .stApp {
+        background-color: #080C14;
+        background-image: 
+            /* Top Ambient Glows: AMD Crimson & High-Tech Cyan */
+            radial-gradient(circle at 10% 0%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 90% 0%, rgba(56, 189, 248, 0.06) 0%, transparent 40%),
+            radial-gradient(circle at 50% 100%, rgba(30, 58, 138, 0.08) 0%, transparent 50%),
+            /* Subtly Faint Semiconductor Circuit Grid */
+            linear-gradient(rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
+        background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+        color: #E2E8F0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
-    .sub-title {
-        font-size: 1.1rem;
+
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif !important;
+        letter-spacing: -0.02em;
+        color: #F8FAFC !important;
+    }
+
+    /* Top HUD Telemetry Bar */
+    .hud-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 0.8rem;
+        align-items: center;
+    }
+    .hud-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        padding: 4px 12px;
+        border-radius: 9999px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: #94A3B8;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+    }
+    .hud-pill-active {
+        background: rgba(237, 28, 36, 0.1);
+        border-color: rgba(237, 28, 36, 0.35);
+        color: #FF6B6B;
+        font-weight: 600;
+    }
+    .hud-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #10B981;
+        box-shadow: 0 0 8px #10B981;
+        animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Header Title & Subtitle */
+    .main-title-hpc {
+        font-size: 2.3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #FFFFFF 30%, #BAE6FD 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.2rem;
+        letter-spacing: -0.03em;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .sub-title-hpc {
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: #94A3B8;
+        margin-bottom: 1.8rem;
+        line-height: 1.5;
+    }
+
+    /* Sidebar Aerospace HUD Styling */
+    [data-testid="stSidebar"] {
+        background-color: #06090F !important;
+        border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
+        background-image: 
+            radial-gradient(circle at 50% 0%, rgba(237, 28, 36, 0.07) 0%, transparent 65%),
+            linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+        background-size: 100% 100%, 24px 24px, 24px 24px;
+    }
+    .sidebar-chip-box {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 12, 20, 0.9) 100%);
+        border: 1px solid rgba(237, 28, 36, 0.25);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    .sidebar-tech-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        font-size: 0.82rem;
+    }
+    .sidebar-tech-item:last-child {
+        border-bottom: none;
+    }
+    .sidebar-tech-label {
+        color: #64748B;
         font-weight: 500;
-        color: #4B5563;
+    }
+    .sidebar-tech-val {
+        color: #E2E8F0;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 600;
+    }
+    .sidebar-tech-val-highlight {
+        color: #38BDF8;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+    }
+
+    /* Tabs Visual Design */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 6px;
+        background: rgba(13, 19, 33, 0.85);
+        padding: 6px 8px;
+        border-radius: 12px;
+        border: 1px solid rgba(56, 189, 248, 0.12);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
         margin-bottom: 1.5rem;
     }
-    .metric-card {
-        background-color: #F8FAFC;
-        border-radius: 10px;
-        padding: 1.2rem;
-        border-left: 5px solid #3B82F6;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-    .metric-card-avx2 {
-        background-color: #FFF7ED;
-        border-radius: 10px;
-        padding: 1.2rem;
-        border-left: 5px solid #EA580C;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-    .metric-title {
-        font-size: 0.9rem;
-        color: #64748B;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-bottom: 0.2rem;
-    }
-    .metric-val {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: #0F172A;
-    }
-    .metric-sub {
-        font-size: 0.85rem;
-        color: #059669;
-        font-weight: 600;
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
     .stTabs [data-baseweb="tab"] {
-        height: 48px;
+        height: 44px;
+        color: #94A3B8 !important;
         font-weight: 600;
-        border-radius: 6px 6px 0 0;
-        padding-left: 18px;
-        padding-right: 18px;
+        font-size: 0.92rem;
+        border-radius: 8px;
+        padding: 0 16px;
+        transition: all 0.25s ease;
+        border: 1px solid transparent;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #F8FAFC !important;
+        background: rgba(255, 255, 255, 0.04);
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, rgba(237, 28, 36, 0.18) 0%, rgba(56, 189, 248, 0.12) 100%) !important;
+        color: #FFFFFF !important;
+        border: 1px solid rgba(237, 28, 36, 0.4) !important;
+        box-shadow: 0 4px 14px rgba(237, 28, 36, 0.2);
+    }
+
+    /* High-Performance Microarchitecture Benchmark Cards */
+    .hpc-card {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.75) 0%, rgba(8, 12, 20, 0.9) 100%);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 12px;
+        padding: 1.3rem;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        transition: transform 0.25s ease, border-color 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .hpc-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(148, 163, 184, 0.3);
+    }
+    .hpc-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 3px;
+        background: #64748B;
+        opacity: 0.6;
+    }
+
+    .hpc-card-autovec {
+        background: linear-gradient(145deg, rgba(14, 116, 144, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 12px;
+        padding: 1.3rem;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.08);
+        transition: transform 0.25s ease, border-color 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .hpc-card-autovec:hover {
+        transform: translateY(-2px);
+        border-color: rgba(56, 189, 248, 0.5);
+    }
+    .hpc-card-autovec::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #0284C7, #38BDF8);
+    }
+
+    .hpc-card-avx2 {
+        background: linear-gradient(145deg, rgba(237, 28, 36, 0.14) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1px solid rgba(237, 28, 36, 0.5);
+        border-radius: 12px;
+        padding: 1.3rem;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 25px rgba(237, 28, 36, 0.2);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .hpc-card-avx2:hover {
+        transform: translateY(-2px);
+        border-color: #FF4D4D;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 35px rgba(237, 28, 36, 0.35);
+    }
+    .hpc-card-avx2::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #ED1C24, #FF7676);
+    }
+
+    .hpc-badge {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+    }
+    .badge-slate { background: rgba(148, 163, 184, 0.15); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.2); }
+    .badge-cyan  { background: rgba(56, 189, 248, 0.15);  color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-red   { background: rgba(237, 28, 36, 0.2);   color: #FF6B6B; border: 1px solid rgba(237, 28, 36, 0.4); font-weight: 700; }
+
+    .hpc-card-title {
+        font-size: 0.88rem;
+        color: #94A3B8;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+    .hpc-card-val {
+        font-size: 2.1rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 800;
+        color: #F8FAFC;
+        line-height: 1.1;
+        margin-bottom: 0.4rem;
+    }
+    .hpc-card-val-red {
+        background: linear-gradient(135deg, #FFFFFF 40%, #FF8A8A 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hpc-card-sub {
+        font-size: 0.82rem;
+        font-family: 'JetBrains Mono', monospace;
+        color: #64748B;
+    }
+    .hpc-card-sub-green {
+        color: #34D399;
+        font-weight: 600;
+    }
+    .hpc-card-sub-red {
+        color: #FF6B6B;
+        font-weight: 700;
+    }
+
+    /* Primary Execution Button (AMD Crimson Flame CTA) */
+    div.stButton > button:first-child {
+        background: linear-gradient(135deg, #ED1C24 0%, #991B1B 100%) !important;
+        color: #FFFFFF !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+        padding: 0.65rem 1.4rem !important;
+        border: 1px solid #FF4D4D !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 20px rgba(237, 28, 36, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    div.stButton > button:first-child:hover {
+        background: linear-gradient(135deg, #FF333B 0%, #B91C1C 100%) !important;
+        box-shadow: 0 0 30px rgba(237, 28, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Native Metrics High-Tech Framing */
+    [data-testid="stMetric"] {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(56, 189, 248, 0.12);
+        border-radius: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+    [data-testid="stMetricValue"] {
+        font-family: 'JetBrains Mono', monospace !important;
+        color: #F8FAFC !important;
+        font-weight: 800 !important;
+        font-size: 1.55rem !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #94A3B8 !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Expanders & DataFrames */
+    .streamlit-expanderHeader {
+        background: rgba(15, 23, 42, 0.75) !important;
+        border: 1px solid rgba(56, 189, 248, 0.15) !important;
+        border-radius: 10px !important;
+        color: #E2E8F0 !important;
+        font-weight: 600 !important;
+    }
+    .streamlit-expanderHeader:hover {
+        border-color: rgba(237, 28, 36, 0.4) !important;
+    }
+    [data-testid="stDataFrame"] {
+        border: 1px solid rgba(56, 189, 248, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* Markdown Code Blocks */
+    code {
+        font-family: 'JetBrains Mono', monospace !important;
+        background: rgba(15, 23, 42, 0.8) !important;
+        color: #38BDF8 !important;
+        border: 1px solid rgba(56, 189, 248, 0.15) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+    }
+    pre code {
+        color: #E2E8F0 !important;
+        background: #06090F !important;
+        border: 1px solid rgba(56, 189, 248, 0.2) !important;
+    }
+
+    /* Figure & Graph Cards */
+    .graph-frame {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(56, 189, 248, 0.15);
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        margin-bottom: 1.2rem;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# Sidebar: System & Microarchitectural Telemetry
+# Sidebar: System & Microarchitectural Telemetry HUD
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/7/7c/AMD_Logo.svg", width=120)
+    # AMD Ryzen Header Branding
+    st.markdown("""
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/AMD_Logo.svg" width="95">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #ED1C24; font-weight: 800; letter-spacing: 1px; border: 1px solid #ED1C24; padding: 2px 6px; border-radius: 4px;">RYZEN™ 7</span>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("### 🖥️ Hardware Telemetry")
-    st.info("""
-    **Processor:** AMD Ryzen 7 7435HS  
-    **Architecture:** Zen 3+ / Zen 4 (x86-64)  
-    **Cores/Threads:** 8 Cores / 16 SMT Threads  
-    **Base / Boost Clock:** 3.1 GHz / 4.5 GHz  
-    **Vector ISA:** AVX2 & FMA3 (256-bit YMM)  
-    """)
+    st.markdown("""
+    <div class="sidebar-chip-box">
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Processor</span>
+            <span class="sidebar-tech-val">Ryzen 7 7435HS</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Architecture</span>
+            <span class="sidebar-tech-val-highlight">Zen 3+ / Zen 4</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Cores / SMT</span>
+            <span class="sidebar-tech-val">8C / 16T</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Clock Speed</span>
+            <span class="sidebar-tech-val">3.1 - 4.5 GHz</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Vector ISA</span>
+            <span class="sidebar-tech-val-highlight">AVX2 & FMA3</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">SIMD Width</span>
+            <span class="sidebar-tech-val">256-bit (YMM)</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("### 💾 Cache Subsystem")
     st.markdown("""
-    - **L1 Data Cache:** 32 KB / core (8-way)
-    - **L2 Unified:** 512 KB / core (8-way)
-    - **L3 Shared Cache:** 16 MB CCX
-    - **Main Memory:** 16 GB DDR5 RAM
-    """)
+    <div class="sidebar-chip-box">
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">L1 D-Cache</span>
+            <span class="sidebar-tech-val">32 KB / core (8-way)</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">L2 Unified</span>
+            <span class="sidebar-tech-val">512 KB / core (8-way)</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">L3 Shared</span>
+            <span class="sidebar-tech-val-highlight">16 MB (CCX Unified)</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Main Memory</span>
+            <span class="sidebar-tech-val">16 GB DDR5</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("### ⚙️ Compiler Toolchain")
     st.markdown("""
-    - **Compiler:** GCC 16.2.0 (UCRT64 MinGW)
-    - **Flags:** `-O3 -mavx2 -mfma -march=native`
-    - **Build System:** CMake 4.5.1 + Ninja 1.13
-    """)
+    <div class="sidebar-chip-box">
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Toolchain</span>
+            <span class="sidebar-tech-val">GCC 16.2.0 (UCRT64)</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Build System</span>
+            <span class="sidebar-tech-val">CMake 4.5 + Ninja</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Optimization</span>
+            <span class="sidebar-tech-val-highlight">-O3 -mavx2 -mfma</span>
+        </div>
+        <div class="sidebar-tech-item">
+            <span class="sidebar-tech-label">Memory Layout</span>
+            <span class="sidebar-tech-val">32-Byte Aligned SoA</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("---")
-    st.caption("BTech COA Research Project | Live Deployment")
+    st.caption("BTech COA Research Project | Live System Evaluation")
 
 # -----------------------------------------------------------------------------
-# Header
+# Top HUD Bar & Header
 # -----------------------------------------------------------------------------
-st.markdown('<div class="main-title">⚡ SIMD Vectorization of Color Appearance Models</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Computer Organization and Architecture (COA) Research Project | Live Interactive Deployment</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="hud-bar">
+    <div class="hud-pill"><span class="hud-dot"></span> HARDWARE ACCELERATION: ACTIVE</div>
+    <div class="hud-pill hud-pill-active">AMD RYZEN™ PLATFORM</div>
+    <div class="hud-pill">ISA: AVX2 + FMA3 (256-BIT YMM)</div>
+    <div class="hud-pill">MODEL: CIE CAM16 FORWARD</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="main-title-hpc">⚡ SIMD Vectorization of Color Appearance Models</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title-hpc">Computer Organization and Architecture (COA) High-Performance Computing Research Benchmarking Suite</div>', unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # Tabs
@@ -143,40 +517,43 @@ with tab1:
     else:
         df_bench = None
 
-    # Top metric cards for 10K workload
+    # Top metric cards for 10K workload with high-tech cards
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">1. Scalar Baseline (AoS)</div>
-            <div class="metric-val">3.84 Mcps</div>
-            <div class="metric-sub">Median: 2.61 ms | Speedup: 1.00x</div>
+        <div class="hpc-card">
+            <span class="hpc-badge badge-slate">AOS LAYOUT | SCALAR LIBM</span>
+            <div class="hpc-card-title">1. Scalar C++ Baseline</div>
+            <div class="hpc-card-val">3.84 <span style="font-size:1.1rem; color:#94A3B8;">Mcps</span></div>
+            <div class="hpc-card-sub">Median: 2.61 ms | Speedup: 1.00× (Base)</div>
         </div>
         """, unsafe_allow_html=True)
     with c2:
         st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">2. Compiler Auto-Vec (SoA)</div>
-            <div class="metric-val">5.49 Mcps</div>
-            <div class="metric-sub">Median: 1.82 ms | Speedup: 1.43x</div>
+        <div class="hpc-card-autovec">
+            <span class="hpc-badge badge-cyan">SOA 32B ALIGNED | GCC -O3</span>
+            <div class="hpc-card-title">2. Compiler Auto-Vectorization</div>
+            <div class="hpc-card-val">5.49 <span style="font-size:1.1rem; color:#38BDF8;">Mcps</span></div>
+            <div class="hpc-card-sub hpc-card-sub-green">Median: 1.82 ms | Speedup: 1.43×</div>
         </div>
         """, unsafe_allow_html=True)
     with c3:
         st.markdown("""
-        <div class="metric-card-avx2">
-            <div class="metric-title">3. Manual AVX2 SIMD (SoA)</div>
-            <div class="metric-val">47.28 Mcps</div>
-            <div class="metric-sub">Median: 0.21 ms | Speedup: 12.32x 🚀</div>
+        <div class="hpc-card-avx2">
+            <span class="hpc-badge badge-red">256-BIT YMM | IN-REGISTER MINIMAX</span>
+            <div class="hpc-card-title">3. Manual AVX2 SIMD Engine</div>
+            <div class="hpc-card-val hpc-card-val-red">47.28 <span style="font-size:1.1rem; color:#FF8A8A;">Mcps</span></div>
+            <div class="hpc-card-sub hpc-card-sub-red">Median: 0.21 ms | Speedup: 12.32× 🚀</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     col_btn, col_info = st.columns([1, 2])
     with col_btn:
         run_bench = st.button("▶️ Execute C++ Benchmark Live on Physical Hardware", type="primary", use_container_width=True)
     with col_info:
-        st.write("Spawns `cam16_benchmark_runner.exe` in real-time, executing warmups and timed runs across 10K, 100K, and 1M samples.")
+        st.write("Spawns `cam16_benchmark_runner.exe` in real-time, executing warmups and timed runs across 10K, 100K, and 1M samples on your AMD Ryzen CPU.")
 
     if run_bench:
         with st.spinner("Executing bare-metal AVX2 benchmark suite..."):
@@ -339,7 +716,7 @@ with tab2:
         lum_orig = r * 0.299 + g * 0.587 + b * 0.114
         text_color_orig = "white" if lum_orig < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid #CBD5E1; display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold;">
+        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
             {color_pick} (100%)
         </div>
         """, unsafe_allow_html=True)
@@ -349,7 +726,7 @@ with tab2:
         lum_mod = rgb_mod[0] * 0.299 + rgb_mod[1] * 0.587 + rgb_mod[2] * 0.114
         text_color_mod = "white" if lum_mod < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid #CBD5E1; display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold;">
+        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
             {mod_hex}
         </div>
         """, unsafe_allow_html=True)
