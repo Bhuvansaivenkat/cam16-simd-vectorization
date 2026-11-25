@@ -11,41 +11,49 @@ from PIL import Image
 # Page Configuration
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="CAM16 SIMD Vectorization | AMD Ryzen Research Lab",
+    page_title="CAM16 SIMD Vectorization | COA Research Dashboard",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # -----------------------------------------------------------------------------
-# Advanced Microarchitecture & HPC Dashboard CSS Stylesheet
+# Custom 4-Tier Blue Palette Stylesheet
+# Palette:
+#   - #102D4D: Deep Midnight Navy (Base background & card depth)
+#   - #4072AF: Medium Royal / Cobalt Blue (Primary accents, buttons, glows)
+#   - #DAE2EF: Soft Ice / Steel Pastel Blue (Borders, labels, subtext, pills)
+#   - #F9F7F8: Crisp Off-White / Pure Snow (Headings, primary values, high contrast)
 # -----------------------------------------------------------------------------
 st.markdown(r"""
 <style>
     /* Google Fonts Import: Inter & JetBrains Mono */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Global Theme & Deep Silicon Canvas Background */
+    /* Global Canvas: Deep Midnight Navy (#102D4D) */
     .stApp {
-        background-color: #080C14;
+        background-color: #102D4D;
         background-image: 
-            /* Top Ambient Glows: AMD Crimson & High-Tech Cyan */
-            radial-gradient(circle at 10% 0%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
-            radial-gradient(circle at 90% 0%, rgba(56, 189, 248, 0.06) 0%, transparent 40%),
-            radial-gradient(circle at 50% 100%, rgba(30, 58, 138, 0.08) 0%, transparent 50%),
-            /* Subtly Faint Semiconductor Circuit Grid */
-            linear-gradient(rgba(56, 189, 248, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
+            /* Subtle Ambient Lighting Gradients */
+            radial-gradient(circle at 10% 0%, rgba(64, 114, 175, 0.3) 0%, transparent 45%),
+            radial-gradient(circle at 90% 0%, rgba(218, 226, 239, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 50% 100%, rgba(10, 25, 45, 0.9) 0%, transparent 50%),
+            /* Silicon Circuit Grid in Ice Blue (#DAE2EF) */
+            linear-gradient(rgba(218, 226, 239, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(218, 226, 239, 0.035) 1px, transparent 1px);
         background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
-        color: #E2E8F0;
+        color: #F9F7F8;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Headings */
+    /* Headings in Snow White (#F9F7F8) */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
         letter-spacing: -0.02em;
-        color: #F8FAFC !important;
+        color: #F9F7F8 !important;
+    }
+    p, span, label {
+        color: #DAE2EF;
     }
 
     /* Top HUD Telemetry Bar */
@@ -60,29 +68,29 @@ st.markdown(r"""
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(15, 23, 42, 0.7);
-        border: 1px solid rgba(56, 189, 248, 0.2);
+        background: rgba(16, 45, 77, 0.8);
+        border: 1px solid rgba(64, 114, 175, 0.45);
         padding: 4px 12px;
         border-radius: 9999px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.75rem;
-        color: #94A3B8;
+        color: #DAE2EF;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         backdrop-filter: blur(8px);
     }
     .hud-pill-active {
-        background: rgba(237, 28, 36, 0.1);
-        border-color: rgba(237, 28, 36, 0.35);
-        color: #FF6B6B;
-        font-weight: 600;
+        background: rgba(64, 114, 175, 0.35);
+        border-color: #DAE2EF;
+        color: #F9F7F8;
+        font-weight: 700;
     }
     .hud-dot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background-color: #10B981;
-        box-shadow: 0 0 8px #10B981;
+        background-color: #DAE2EF;
+        box-shadow: 0 0 10px #DAE2EF;
         animation: pulse-dot 2s infinite;
     }
     @keyframes pulse-dot {
@@ -94,7 +102,7 @@ st.markdown(r"""
     .main-title-hpc {
         font-size: 2.3rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #FFFFFF 30%, #BAE6FD 100%);
+        background: linear-gradient(135deg, #F9F7F8 30%, #DAE2EF 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
@@ -106,51 +114,57 @@ st.markdown(r"""
     .sub-title-hpc {
         font-size: 1.05rem;
         font-weight: 400;
-        color: #94A3B8;
+        color: #DAE2EF;
+        opacity: 0.9;
         margin-bottom: 1.8rem;
         line-height: 1.5;
     }
 
     /* Sidebar Aerospace HUD Styling */
     [data-testid="stSidebar"] {
-        background-color: #06090F !important;
-        border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
+        background-color: #0A1E35 !important;
+        border-right: 1px solid rgba(64, 114, 175, 0.35) !important;
         background-image: 
-            radial-gradient(circle at 50% 0%, rgba(237, 28, 36, 0.07) 0%, transparent 65%),
-            linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            radial-gradient(circle at 50% 0%, rgba(64, 114, 175, 0.25) 0%, transparent 65%),
+            linear-gradient(rgba(218, 226, 239, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(218, 226, 239, 0.02) 1px, transparent 1px);
         background-size: 100% 100%, 24px 24px, 24px 24px;
     }
     .sidebar-chip-box {
-        background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 12, 20, 0.9) 100%);
-        border: 1px solid rgba(237, 28, 36, 0.25);
+        background: linear-gradient(145deg, rgba(16, 45, 77, 0.85) 0%, rgba(10, 30, 53, 0.95) 100%);
+        border: 1px solid rgba(64, 114, 175, 0.4);
         border-radius: 10px;
         padding: 12px 14px;
         margin-bottom: 14px;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 1px 0 rgba(218, 226, 239, 0.1), 0 4px 14px rgba(0, 0, 0, 0.4);
     }
     .sidebar-tech-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 6px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(218, 226, 239, 0.08);
         font-size: 0.82rem;
     }
     .sidebar-tech-item:last-child {
         border-bottom: none;
     }
     .sidebar-tech-label {
-        color: #64748B;
+        color: #DAE2EF;
+        opacity: 0.8;
         font-weight: 500;
     }
     .sidebar-tech-val {
-        color: #E2E8F0;
+        color: #F9F7F8;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 600;
     }
     .sidebar-tech-val-highlight {
-        color: #38BDF8;
+        color: #F9F7F8;
+        background: rgba(64, 114, 175, 0.4);
+        border: 1px solid rgba(218, 226, 239, 0.3);
+        padding: 1px 6px;
+        border-radius: 4px;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 700;
     }
@@ -158,16 +172,16 @@ st.markdown(r"""
     /* Tabs Visual Design */
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
-        background: rgba(13, 19, 33, 0.85);
+        background: rgba(16, 45, 77, 0.85);
         padding: 6px 8px;
         border-radius: 12px;
-        border: 1px solid rgba(56, 189, 248, 0.12);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(64, 114, 175, 0.35);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
         margin-bottom: 1.5rem;
     }
     .stTabs [data-baseweb="tab"] {
         height: 44px;
-        color: #94A3B8 !important;
+        color: #DAE2EF !important;
         font-weight: 600;
         font-size: 0.92rem;
         border-radius: 8px;
@@ -176,20 +190,20 @@ st.markdown(r"""
         border: 1px solid transparent;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #F8FAFC !important;
-        background: rgba(255, 255, 255, 0.04);
+        color: #F9F7F8 !important;
+        background: rgba(64, 114, 175, 0.25);
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, rgba(237, 28, 36, 0.18) 0%, rgba(56, 189, 248, 0.12) 100%) !important;
-        color: #FFFFFF !important;
-        border: 1px solid rgba(237, 28, 36, 0.4) !important;
-        box-shadow: 0 4px 14px rgba(237, 28, 36, 0.2);
+        background: linear-gradient(135deg, #4072AF 0%, #102D4D 100%) !important;
+        color: #F9F7F8 !important;
+        border: 1px solid #DAE2EF !important;
+        box-shadow: 0 4px 14px rgba(64, 114, 175, 0.5);
     }
 
-    /* High-Performance Microarchitecture Benchmark Cards */
+    /* High-Performance Benchmark Cards */
     .hpc-card {
-        background: linear-gradient(145deg, rgba(15, 23, 42, 0.75) 0%, rgba(8, 12, 20, 0.9) 100%);
-        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: linear-gradient(145deg, rgba(16, 45, 77, 0.75) 0%, rgba(10, 30, 53, 0.9) 100%);
+        border: 1px solid rgba(218, 226, 239, 0.2);
         border-radius: 12px;
         padding: 1.3rem;
         backdrop-filter: blur(12px);
@@ -200,59 +214,58 @@ st.markdown(r"""
     }
     .hpc-card:hover {
         transform: translateY(-2px);
-        border-color: rgba(148, 163, 184, 0.3);
+        border-color: rgba(218, 226, 239, 0.4);
     }
     .hpc-card::before {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0; height: 3px;
-        background: #64748B;
-        opacity: 0.6;
+        background: rgba(218, 226, 239, 0.4);
     }
 
     .hpc-card-autovec {
-        background: linear-gradient(145deg, rgba(14, 116, 144, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.3);
+        background: linear-gradient(145deg, rgba(64, 114, 175, 0.25) 0%, rgba(16, 45, 77, 0.85) 100%);
+        border: 1px solid rgba(64, 114, 175, 0.5);
         border-radius: 12px;
         padding: 1.3rem;
         backdrop-filter: blur(12px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.08);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(64, 114, 175, 0.15);
         transition: transform 0.25s ease, border-color 0.25s ease;
         position: relative;
         overflow: hidden;
     }
     .hpc-card-autovec:hover {
         transform: translateY(-2px);
-        border-color: rgba(56, 189, 248, 0.5);
+        border-color: #DAE2EF;
     }
     .hpc-card-autovec::before {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0; height: 3px;
-        background: linear-gradient(90deg, #0284C7, #38BDF8);
+        background: #4072AF;
     }
 
     .hpc-card-avx2 {
-        background: linear-gradient(145deg, rgba(237, 28, 36, 0.14) 0%, rgba(15, 23, 42, 0.9) 100%);
-        border: 1px solid rgba(237, 28, 36, 0.5);
+        background: linear-gradient(145deg, rgba(64, 114, 175, 0.45) 0%, rgba(16, 45, 77, 0.95) 100%);
+        border: 1.5px solid #DAE2EF;
         border-radius: 12px;
         padding: 1.3rem;
         backdrop-filter: blur(12px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 25px rgba(237, 28, 36, 0.2);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 25px rgba(64, 114, 175, 0.4);
         transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         position: relative;
         overflow: hidden;
     }
     .hpc-card-avx2:hover {
         transform: translateY(-2px);
-        border-color: #FF4D4D;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 35px rgba(237, 28, 36, 0.35);
+        border-color: #F9F7F8;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 35px rgba(64, 114, 175, 0.6);
     }
     .hpc-card-avx2::before {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0; height: 3px;
-        background: linear-gradient(90deg, #ED1C24, #FF7676);
+        background: linear-gradient(90deg, #4072AF, #DAE2EF);
     }
 
     .hpc-badge {
@@ -265,13 +278,13 @@ st.markdown(r"""
         display: inline-block;
         margin-bottom: 0.5rem;
     }
-    .badge-slate { background: rgba(148, 163, 184, 0.15); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.2); }
-    .badge-cyan  { background: rgba(56, 189, 248, 0.15);  color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3); }
-    .badge-red   { background: rgba(237, 28, 36, 0.2);   color: #FF6B6B; border: 1px solid rgba(237, 28, 36, 0.4); font-weight: 700; }
+    .badge-slate { background: rgba(218, 226, 239, 0.15); color: #DAE2EF; border: 1px solid rgba(218, 226, 239, 0.3); }
+    .badge-cyan  { background: rgba(64, 114, 175, 0.3);  color: #F9F7F8; border: 1px solid #4072AF; }
+    .badge-red   { background: #4072AF; color: #F9F7F8; border: 1px solid #DAE2EF; font-weight: 800; }
 
     .hpc-card-title {
         font-size: 0.88rem;
-        color: #94A3B8;
+        color: #DAE2EF;
         font-weight: 600;
         margin-bottom: 0.3rem;
     }
@@ -279,66 +292,66 @@ st.markdown(r"""
         font-size: 2.1rem;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 800;
-        color: #F8FAFC;
+        color: #F9F7F8;
         line-height: 1.1;
         margin-bottom: 0.4rem;
     }
     .hpc-card-val-red {
-        background: linear-gradient(135deg, #FFFFFF 40%, #FF8A8A 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #F9F7F8;
+        text-shadow: 0 0 16px rgba(218, 226, 239, 0.6);
     }
     .hpc-card-sub {
         font-size: 0.82rem;
         font-family: 'JetBrains Mono', monospace;
-        color: #64748B;
+        color: #DAE2EF;
+        opacity: 0.85;
     }
     .hpc-card-sub-green {
-        color: #34D399;
+        color: #F9F7F8;
         font-weight: 600;
     }
     .hpc-card-sub-red {
-        color: #FF6B6B;
+        color: #DAE2EF;
         font-weight: 700;
     }
 
-    /* Primary Execution Button (AMD Crimson Flame CTA) */
+    /* Primary Execution Button (#4072AF + #DAE2EF Accents) */
     div.stButton > button:first-child {
-        background: linear-gradient(135deg, #ED1C24 0%, #991B1B 100%) !important;
-        color: #FFFFFF !important;
+        background: linear-gradient(135deg, #4072AF 0%, #204B7D 100%) !important;
+        color: #F9F7F8 !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 700 !important;
         font-size: 0.95rem !important;
         letter-spacing: 0.5px !important;
         text-transform: uppercase !important;
         padding: 0.65rem 1.4rem !important;
-        border: 1px solid #FF4D4D !important;
+        border: 1px solid #DAE2EF !important;
         border-radius: 10px !important;
-        box-shadow: 0 0 20px rgba(237, 28, 36, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 0 20px rgba(64, 114, 175, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div.stButton > button:first-child:hover {
-        background: linear-gradient(135deg, #FF333B 0%, #B91C1C 100%) !important;
-        box-shadow: 0 0 30px rgba(237, 28, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        background: linear-gradient(135deg, #4F85C7 0%, #295F9E 100%) !important;
+        box-shadow: 0 0 30px rgba(64, 114, 175, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
         transform: translateY(-1px) !important;
     }
 
     /* Native Metrics High-Tech Framing */
     [data-testid="stMetric"] {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(56, 189, 248, 0.12);
+        background: rgba(16, 45, 77, 0.65);
+        border: 1px solid rgba(64, 114, 175, 0.35);
         border-radius: 10px;
         padding: 12px 14px;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     }
     [data-testid="stMetricValue"] {
         font-family: 'JetBrains Mono', monospace !important;
-        color: #F8FAFC !important;
+        color: #F9F7F8 !important;
         font-weight: 800 !important;
         font-size: 1.55rem !important;
     }
     [data-testid="stMetricLabel"] {
-        color: #94A3B8 !important;
+        color: #DAE2EF !important;
         font-weight: 600 !important;
         font-size: 0.78rem !important;
         text-transform: uppercase;
@@ -347,17 +360,17 @@ st.markdown(r"""
 
     /* Expanders & DataFrames */
     .streamlit-expanderHeader {
-        background: rgba(15, 23, 42, 0.75) !important;
-        border: 1px solid rgba(56, 189, 248, 0.15) !important;
+        background: rgba(16, 45, 77, 0.85) !important;
+        border: 1px solid rgba(64, 114, 175, 0.35) !important;
         border-radius: 10px !important;
-        color: #E2E8F0 !important;
+        color: #F9F7F8 !important;
         font-weight: 600 !important;
     }
     .streamlit-expanderHeader:hover {
-        border-color: rgba(237, 28, 36, 0.4) !important;
+        border-color: #DAE2EF !important;
     }
     [data-testid="stDataFrame"] {
-        border: 1px solid rgba(56, 189, 248, 0.15);
+        border: 1px solid rgba(64, 114, 175, 0.35);
         border-radius: 10px;
         overflow: hidden;
     }
@@ -365,22 +378,22 @@ st.markdown(r"""
     /* Markdown Code Blocks */
     code {
         font-family: 'JetBrains Mono', monospace !important;
-        background: rgba(15, 23, 42, 0.8) !important;
-        color: #38BDF8 !important;
-        border: 1px solid rgba(56, 189, 248, 0.15) !important;
+        background: rgba(16, 45, 77, 0.9) !important;
+        color: #DAE2EF !important;
+        border: 1px solid rgba(64, 114, 175, 0.35) !important;
         padding: 2px 6px !important;
         border-radius: 4px !important;
     }
     pre code {
-        color: #E2E8F0 !important;
-        background: #06090F !important;
-        border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        color: #F9F7F8 !important;
+        background: #0A1E35 !important;
+        border: 1px solid rgba(64, 114, 175, 0.4) !important;
     }
 
     /* Figure & Graph Cards */
     .graph-frame {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(56, 189, 248, 0.15);
+        background: rgba(16, 45, 77, 0.65);
+        border: 1px solid rgba(64, 114, 175, 0.35);
         border-radius: 12px;
         padding: 10px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
@@ -393,11 +406,11 @@ st.markdown(r"""
 # Sidebar: System & Microarchitectural Telemetry HUD
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    # AMD Ryzen Header Branding
+    # AMD Ryzen Header Branding with new palette
     st.markdown("""
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/AMD_Logo.svg" width="95">
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #ED1C24; font-weight: 800; letter-spacing: 1px; border: 1px solid #ED1C24; padding: 2px 6px; border-radius: 4px;">RYZEN™ 7</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #F9F7F8; background: #4072AF; border: 1px solid #DAE2EF; font-weight: 800; letter-spacing: 1px; padding: 2px 8px; border-radius: 4px;">RYZEN™ 7</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -524,7 +537,7 @@ with tab1:
         <div class="hpc-card">
             <span class="hpc-badge badge-slate">AOS LAYOUT | SCALAR LIBM</span>
             <div class="hpc-card-title">1. Scalar C++ Baseline</div>
-            <div class="hpc-card-val">3.84 <span style="font-size:1.1rem; color:#94A3B8;">Mcps</span></div>
+            <div class="hpc-card-val">3.84 <span style="font-size:1.1rem; color:#DAE2EF;">Mcps</span></div>
             <div class="hpc-card-sub">Median: 2.61 ms | Speedup: 1.00× (Base)</div>
         </div>
         """, unsafe_allow_html=True)
@@ -533,7 +546,7 @@ with tab1:
         <div class="hpc-card-autovec">
             <span class="hpc-badge badge-cyan">SOA 32B ALIGNED | GCC -O3</span>
             <div class="hpc-card-title">2. Compiler Auto-Vectorization</div>
-            <div class="hpc-card-val">5.49 <span style="font-size:1.1rem; color:#38BDF8;">Mcps</span></div>
+            <div class="hpc-card-val">5.49 <span style="font-size:1.1rem; color:#DAE2EF;">Mcps</span></div>
             <div class="hpc-card-sub hpc-card-sub-green">Median: 1.82 ms | Speedup: 1.43×</div>
         </div>
         """, unsafe_allow_html=True)
@@ -542,7 +555,7 @@ with tab1:
         <div class="hpc-card-avx2">
             <span class="hpc-badge badge-red">256-BIT YMM | IN-REGISTER MINIMAX</span>
             <div class="hpc-card-title">3. Manual AVX2 SIMD Engine</div>
-            <div class="hpc-card-val hpc-card-val-red">47.28 <span style="font-size:1.1rem; color:#FF8A8A;">Mcps</span></div>
+            <div class="hpc-card-val hpc-card-val-red">47.28 <span style="font-size:1.1rem; color:#F9F7F8;">Mcps</span></div>
             <div class="hpc-card-sub hpc-card-sub-red">Median: 0.21 ms | Speedup: 12.32× 🚀</div>
         </div>
         """, unsafe_allow_html=True)
@@ -716,7 +729,7 @@ with tab2:
         lum_orig = r * 0.299 + g * 0.587 + b * 0.114
         text_color_orig = "white" if lum_orig < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold; box-shadow: 0 4px 14px rgba(0,0,0,0.35);">
             {color_pick} (100%)
         </div>
         """, unsafe_allow_html=True)
@@ -726,7 +739,7 @@ with tab2:
         lum_mod = rgb_mod[0] * 0.299 + rgb_mod[1] * 0.587 + rgb_mod[2] * 0.114
         text_color_mod = "white" if lum_mod < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold; box-shadow: 0 4px 14px rgba(0,0,0,0.35);">
             {mod_hex}
         </div>
         """, unsafe_allow_html=True)
