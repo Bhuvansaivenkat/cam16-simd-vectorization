@@ -18,42 +18,55 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# Custom 4-Tier Blue Palette Stylesheet
+# Custom 4-Tier Light Blue Palette Stylesheet
 # Palette:
-#   - #102D4D: Deep Midnight Navy (Base background & card depth)
-#   - #4072AF: Medium Royal / Cobalt Blue (Primary accents, buttons, glows)
-#   - #DAE2EF: Soft Ice / Steel Pastel Blue (Borders, labels, subtext, pills)
-#   - #F9F7F8: Crisp Off-White / Pure Snow (Headings, primary values, high contrast)
+#   - #FFFFFF / #F8FAFD: Crisp White Canvas (Base UI background & clean cards)
+#   - #DAE2EF: Soft Pastel Ice Blue (Borders, card dividers, subtle chips)
+#   - #4072AF: Medium Cobalt / Slate Blue (Subheadings, primary accents, active elements)
+#   - #102D4D: Deep Midnight Navy Blue (Primary headings, text, metric values, high contrast)
 # -----------------------------------------------------------------------------
 st.markdown(r"""
 <style>
     /* Google Fonts Import: Inter & JetBrains Mono */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Global Canvas: Deep Midnight Navy (#102D4D) */
+    /* Global Canvas: Crisp White (#FFFFFF) with Clean Technical Mesh */
     .stApp {
-        background-color: #102D4D;
+        background-color: #FFFFFF;
         background-image: 
-            /* Subtle Ambient Lighting Gradients */
-            radial-gradient(circle at 10% 0%, rgba(64, 114, 175, 0.3) 0%, transparent 45%),
-            radial-gradient(circle at 90% 0%, rgba(218, 226, 239, 0.15) 0%, transparent 45%),
-            radial-gradient(circle at 50% 100%, rgba(10, 25, 45, 0.9) 0%, transparent 50%),
-            /* Silicon Circuit Grid in Ice Blue (#DAE2EF) */
-            linear-gradient(rgba(218, 226, 239, 0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(218, 226, 239, 0.035) 1px, transparent 1px);
+            /* Subtle Ambient Research Laboratory Gradients */
+            radial-gradient(circle at 12% 0%, rgba(218, 226, 239, 0.5) 0%, transparent 45%),
+            radial-gradient(circle at 88% 5%, rgba(64, 114, 175, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 50% 100%, rgba(218, 226, 239, 0.35) 0%, transparent 50%),
+            /* High-Precision Silicon Grid in Soft Blue (#4072AF, 4% opacity) */
+            linear-gradient(rgba(64, 114, 175, 0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(64, 114, 175, 0.045) 1px, transparent 1px);
         background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
-        color: #F9F7F8;
+        color: #102D4D;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Headings in Snow White (#F9F7F8) */
+    /* Headings in Deep Midnight Navy Blue (#102D4D) */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
         letter-spacing: -0.02em;
-        color: #F9F7F8 !important;
+        color: #102D4D !important;
+        font-weight: 700 !important;
     }
-    p, span, label {
-        color: #DAE2EF;
+    p, span, label, div {
+        color: #102D4D;
+    }
+    .stMarkdown p, .stMarkdown li {
+        color: #102D4D;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    .stMarkdown strong {
+        color: #102D4D !important;
+        font-weight: 700;
+    }
+    .stCaption, caption {
+        color: #4072AF !important;
     }
 
     /* Top HUD Telemetry Bar */
@@ -68,29 +81,29 @@ st.markdown(r"""
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(16, 45, 77, 0.8);
-        border: 1px solid rgba(64, 114, 175, 0.45);
-        padding: 4px 12px;
+        background: #FFFFFF;
+        border: 1px solid #DAE2EF;
+        padding: 5px 14px;
         border-radius: 9999px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.75rem;
-        color: #DAE2EF;
+        color: #102D4D;
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 6px rgba(16, 45, 77, 0.05);
     }
     .hud-pill-active {
-        background: rgba(64, 114, 175, 0.35);
-        border-color: #DAE2EF;
-        color: #F9F7F8;
+        background: #DAE2EF;
+        border-color: #4072AF;
+        color: #102D4D;
         font-weight: 700;
     }
     .hud-dot {
-        width: 7px;
-        height: 7px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background-color: #DAE2EF;
-        box-shadow: 0 0 10px #DAE2EF;
+        background-color: #4072AF;
+        box-shadow: 0 0 8px rgba(64, 114, 175, 0.6);
         animation: pulse-dot 2s infinite;
     }
     @keyframes pulse-dot {
@@ -102,7 +115,7 @@ st.markdown(r"""
     .main-title-hpc {
         font-size: 2.3rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #F9F7F8 30%, #DAE2EF 100%);
+        background: linear-gradient(135deg, #102D4D 20%, #4072AF 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
@@ -113,57 +126,55 @@ st.markdown(r"""
     }
     .sub-title-hpc {
         font-size: 1.05rem;
-        font-weight: 400;
-        color: #DAE2EF;
-        opacity: 0.9;
+        font-weight: 500;
+        color: #4072AF;
         margin-bottom: 1.8rem;
         line-height: 1.5;
     }
 
-    /* Sidebar Aerospace HUD Styling */
+    /* Sidebar Aerospace HUD Styling (Light Theme) */
     [data-testid="stSidebar"] {
-        background-color: #0A1E35 !important;
-        border-right: 1px solid rgba(64, 114, 175, 0.35) !important;
+        background-color: #F8FAFD !important;
+        border-right: 1px solid #DAE2EF !important;
         background-image: 
-            radial-gradient(circle at 50% 0%, rgba(64, 114, 175, 0.25) 0%, transparent 65%),
-            linear-gradient(rgba(218, 226, 239, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(218, 226, 239, 0.02) 1px, transparent 1px);
+            radial-gradient(circle at 50% 0%, rgba(64, 114, 175, 0.08) 0%, transparent 65%),
+            linear-gradient(rgba(64, 114, 175, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(64, 114, 175, 0.03) 1px, transparent 1px);
         background-size: 100% 100%, 24px 24px, 24px 24px;
     }
     .sidebar-chip-box {
-        background: linear-gradient(145deg, rgba(16, 45, 77, 0.85) 0%, rgba(10, 30, 53, 0.95) 100%);
-        border: 1px solid rgba(64, 114, 175, 0.4);
+        background: #FFFFFF;
+        border: 1px solid #DAE2EF;
         border-radius: 10px;
         padding: 12px 14px;
         margin-bottom: 14px;
-        box-shadow: inset 0 1px 0 rgba(218, 226, 239, 0.1), 0 4px 14px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 2px 8px rgba(16, 45, 77, 0.05);
     }
     .sidebar-tech-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 6px 0;
-        border-bottom: 1px solid rgba(218, 226, 239, 0.08);
+        border-bottom: 1px solid #F0F4FA;
         font-size: 0.82rem;
     }
     .sidebar-tech-item:last-child {
         border-bottom: none;
     }
     .sidebar-tech-label {
-        color: #DAE2EF;
-        opacity: 0.8;
-        font-weight: 500;
+        color: #4072AF;
+        font-weight: 600;
     }
     .sidebar-tech-val {
-        color: #F9F7F8;
+        color: #102D4D;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 600;
     }
     .sidebar-tech-val-highlight {
-        color: #F9F7F8;
-        background: rgba(64, 114, 175, 0.4);
-        border: 1px solid rgba(218, 226, 239, 0.3);
-        padding: 1px 6px;
+        color: #102D4D;
+        background: #DAE2EF;
+        border: 1px solid #4072AF;
+        padding: 1px 7px;
         border-radius: 4px;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 700;
@@ -171,101 +182,100 @@ st.markdown(r"""
 
     /* Tabs Visual Design */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        background: rgba(16, 45, 77, 0.85);
+        gap: 8px;
+        background: #F0F4FA;
         padding: 6px 8px;
         border-radius: 12px;
-        border: 1px solid rgba(64, 114, 175, 0.35);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        border: 1px solid #DAE2EF;
+        box-shadow: 0 2px 8px rgba(16, 45, 77, 0.04);
         margin-bottom: 1.5rem;
     }
     .stTabs [data-baseweb="tab"] {
-        height: 44px;
-        color: #DAE2EF !important;
+        height: 42px;
+        color: #4072AF !important;
         font-weight: 600;
         font-size: 0.92rem;
         border-radius: 8px;
         padding: 0 16px;
-        transition: all 0.25s ease;
+        transition: all 0.2s ease;
         border: 1px solid transparent;
+        background: transparent;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #F9F7F8 !important;
-        background: rgba(64, 114, 175, 0.25);
+        color: #102D4D !important;
+        background: rgba(218, 226, 239, 0.6);
     }
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, #4072AF 0%, #102D4D 100%) !important;
-        color: #F9F7F8 !important;
-        border: 1px solid #DAE2EF !important;
-        box-shadow: 0 4px 14px rgba(64, 114, 175, 0.5);
+        color: #FFFFFF !important;
+        border: 1px solid #102D4D !important;
+        box-shadow: 0 4px 12px rgba(16, 45, 77, 0.22) !important;
     }
 
     /* High-Performance Benchmark Cards */
     .hpc-card {
-        background: linear-gradient(145deg, rgba(16, 45, 77, 0.75) 0%, rgba(10, 30, 53, 0.9) 100%);
-        border: 1px solid rgba(218, 226, 239, 0.2);
+        background: #FFFFFF;
+        border: 1.5px solid #DAE2EF;
         border-radius: 12px;
         padding: 1.3rem;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-        transition: transform 0.25s ease, border-color 0.25s ease;
+        box-shadow: 0 4px 16px rgba(16, 45, 77, 0.06);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         position: relative;
         overflow: hidden;
     }
     .hpc-card:hover {
         transform: translateY(-2px);
-        border-color: rgba(218, 226, 239, 0.4);
+        border-color: #4072AF;
+        box-shadow: 0 6px 20px rgba(16, 45, 77, 0.12);
     }
     .hpc-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; height: 3px;
-        background: rgba(218, 226, 239, 0.4);
+        top: 0; left: 0; right: 0; height: 4px;
+        background: #DAE2EF;
     }
 
     .hpc-card-autovec {
-        background: linear-gradient(145deg, rgba(64, 114, 175, 0.25) 0%, rgba(16, 45, 77, 0.85) 100%);
-        border: 1px solid rgba(64, 114, 175, 0.5);
+        background: #FFFFFF;
+        border: 1.5px solid #DAE2EF;
         border-radius: 12px;
         padding: 1.3rem;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(64, 114, 175, 0.15);
-        transition: transform 0.25s ease, border-color 0.25s ease;
+        box-shadow: 0 4px 16px rgba(16, 45, 77, 0.06);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         position: relative;
         overflow: hidden;
     }
     .hpc-card-autovec:hover {
         transform: translateY(-2px);
-        border-color: #DAE2EF;
+        border-color: #4072AF;
+        box-shadow: 0 6px 20px rgba(16, 45, 77, 0.12);
     }
     .hpc-card-autovec::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; height: 3px;
+        top: 0; left: 0; right: 0; height: 4px;
         background: #4072AF;
     }
 
     .hpc-card-avx2 {
-        background: linear-gradient(145deg, rgba(64, 114, 175, 0.45) 0%, rgba(16, 45, 77, 0.95) 100%);
-        border: 1.5px solid #DAE2EF;
+        background: linear-gradient(145deg, #FFFFFF 0%, #F0F4FA 100%);
+        border: 2px solid #4072AF;
         border-radius: 12px;
         padding: 1.3rem;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 25px rgba(64, 114, 175, 0.4);
+        box-shadow: 0 6px 20px rgba(64, 114, 175, 0.18);
         transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         position: relative;
         overflow: hidden;
     }
     .hpc-card-avx2:hover {
         transform: translateY(-2px);
-        border-color: #F9F7F8;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 35px rgba(64, 114, 175, 0.6);
+        box-shadow: 0 8px 26px rgba(64, 114, 175, 0.28);
     }
     .hpc-card-avx2::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; height: 3px;
-        background: linear-gradient(90deg, #4072AF, #DAE2EF);
+        top: 0; left: 0; right: 0; height: 4px;
+        background: linear-gradient(90deg, #4072AF, #102D4D);
     }
 
     .hpc-badge {
@@ -273,131 +283,184 @@ st.markdown(r"""
         font-size: 0.72rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
-        padding: 2px 8px;
+        padding: 3px 8px;
         border-radius: 4px;
         display: inline-block;
         margin-bottom: 0.5rem;
+        font-weight: 700;
     }
-    .badge-slate { background: rgba(218, 226, 239, 0.15); color: #DAE2EF; border: 1px solid rgba(218, 226, 239, 0.3); }
-    .badge-cyan  { background: rgba(64, 114, 175, 0.3);  color: #F9F7F8; border: 1px solid #4072AF; }
-    .badge-red   { background: #4072AF; color: #F9F7F8; border: 1px solid #DAE2EF; font-weight: 800; }
+    .badge-slate { background: #DAE2EF; color: #102D4D; border: 1px solid #CAD5E5; }
+    .badge-cyan  { background: rgba(64, 114, 175, 0.15);  color: #4072AF; border: 1px solid #4072AF; }
+    .badge-red   { background: #102D4D; color: #FFFFFF; border: 1px solid #102D4D; }
 
     .hpc-card-title {
-        font-size: 0.88rem;
-        color: #DAE2EF;
-        font-weight: 600;
+        font-size: 0.9rem;
+        color: #4072AF;
+        font-weight: 700;
         margin-bottom: 0.3rem;
     }
     .hpc-card-val {
-        font-size: 2.1rem;
+        font-size: 2.2rem;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 800;
-        color: #F9F7F8;
+        color: #102D4D;
         line-height: 1.1;
         margin-bottom: 0.4rem;
     }
     .hpc-card-val-red {
-        color: #F9F7F8;
-        text-shadow: 0 0 16px rgba(218, 226, 239, 0.6);
+        color: #102D4D;
     }
     .hpc-card-sub {
         font-size: 0.82rem;
         font-family: 'JetBrains Mono', monospace;
-        color: #DAE2EF;
-        opacity: 0.85;
+        color: #4072AF;
+        font-weight: 500;
     }
     .hpc-card-sub-green {
-        color: #F9F7F8;
-        font-weight: 600;
+        color: #102D4D;
+        font-weight: 700;
     }
     .hpc-card-sub-red {
-        color: #DAE2EF;
+        color: #102D4D;
         font-weight: 700;
     }
 
-    /* Primary Execution Button (#4072AF + #DAE2EF Accents) */
+    /* Primary Execution Button (#4072AF + #102D4D Gradient) */
     div.stButton > button:first-child {
-        background: linear-gradient(135deg, #4072AF 0%, #204B7D 100%) !important;
-        color: #F9F7F8 !important;
+        background: linear-gradient(135deg, #4072AF 0%, #102D4D 100%) !important;
+        color: #FFFFFF !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 700 !important;
         font-size: 0.95rem !important;
         letter-spacing: 0.5px !important;
         text-transform: uppercase !important;
         padding: 0.65rem 1.4rem !important;
-        border: 1px solid #DAE2EF !important;
+        border: 1px solid #102D4D !important;
         border-radius: 10px !important;
-        box-shadow: 0 0 20px rgba(64, 114, 175, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+        box-shadow: 0 4px 14px rgba(16, 45, 77, 0.22) !important;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div.stButton > button:first-child:hover {
-        background: linear-gradient(135deg, #4F85C7 0%, #295F9E 100%) !important;
-        box-shadow: 0 0 30px rgba(64, 114, 175, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+        background: linear-gradient(135deg, #4F85C7 0%, #183C66 100%) !important;
+        box-shadow: 0 6px 20px rgba(64, 114, 175, 0.35) !important;
         transform: translateY(-1px) !important;
     }
 
-    /* Native Metrics High-Tech Framing */
+    /* Native Metrics High-Contrast Framing (Blue text on White cards) */
     [data-testid="stMetric"] {
-        background: rgba(16, 45, 77, 0.65);
-        border: 1px solid rgba(64, 114, 175, 0.35);
-        border-radius: 10px;
-        padding: 12px 14px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        background: #FFFFFF !important;
+        border: 1.5px solid #DAE2EF !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 2px 8px rgba(16, 45, 77, 0.05) !important;
     }
     [data-testid="stMetricValue"] {
         font-family: 'JetBrains Mono', monospace !important;
-        color: #F9F7F8 !important;
+        color: #102D4D !important;
         font-weight: 800 !important;
-        font-size: 1.55rem !important;
+        font-size: 1.6rem !important;
     }
     [data-testid="stMetricLabel"] {
-        color: #DAE2EF !important;
+        color: #4072AF !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Sliders: Blue Track, Thumb, and Values */
+    .stSlider div[data-baseweb="slider"] {
+        color: #4072AF !important;
+    }
+    .stSlider div[role="slider"] {
+        background-color: #4072AF !important;
+        border-color: #102D4D !important;
+        box-shadow: 0 0 8px rgba(64, 114, 175, 0.4) !important;
+    }
+    .stSlider [data-testid="stThumbValue"] {
+        color: #102D4D !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-weight: 700 !important;
+    }
+    .stSlider [data-testid="stTickBarMin"], .stSlider [data-testid="stTickBarMax"] {
+        color: #4072AF !important;
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+    label[data-testid="stWidgetLabel"] p {
+        color: #102D4D !important;
         font-weight: 600 !important;
-        font-size: 0.78rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     /* Expanders & DataFrames */
     .streamlit-expanderHeader {
-        background: rgba(16, 45, 77, 0.85) !important;
-        border: 1px solid rgba(64, 114, 175, 0.35) !important;
+        background: #F8FAFD !important;
+        border: 1px solid #DAE2EF !important;
         border-radius: 10px !important;
-        color: #F9F7F8 !important;
-        font-weight: 600 !important;
+        color: #102D4D !important;
+        font-weight: 700 !important;
     }
     .streamlit-expanderHeader:hover {
-        border-color: #DAE2EF !important;
+        border-color: #4072AF !important;
+        background: #F0F4FA !important;
     }
     [data-testid="stDataFrame"] {
-        border: 1px solid rgba(64, 114, 175, 0.35);
+        border: 1px solid #DAE2EF;
         border-radius: 10px;
+        background: #FFFFFF;
+        box-shadow: 0 2px 8px rgba(16, 45, 77, 0.04);
         overflow: hidden;
     }
 
     /* Markdown Code Blocks */
     code {
         font-family: 'JetBrains Mono', monospace !important;
-        background: rgba(16, 45, 77, 0.9) !important;
-        color: #DAE2EF !important;
-        border: 1px solid rgba(64, 114, 175, 0.35) !important;
+        background: #F0F4FA !important;
+        color: #102D4D !important;
+        border: 1px solid #DAE2EF !important;
         padding: 2px 6px !important;
         border-radius: 4px !important;
     }
     pre code {
-        color: #F9F7F8 !important;
-        background: #0A1E35 !important;
-        border: 1px solid rgba(64, 114, 175, 0.4) !important;
+        color: #102D4D !important;
+        background: #F8FAFD !important;
+        border: 1px solid #DAE2EF !important;
     }
 
     /* Figure & Graph Cards */
     .graph-frame {
-        background: rgba(16, 45, 77, 0.65);
-        border: 1px solid rgba(64, 114, 175, 0.35);
+        background: #FFFFFF;
+        border: 1px solid #DAE2EF;
         border-radius: 12px;
         padding: 10px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 4px 14px rgba(16, 45, 77, 0.06);
         margin-bottom: 1.2rem;
+    }
+
+    /* Scientific Tables Styling */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: #FFFFFF;
+        border: 1px solid #DAE2EF;
+        border-radius: 8px;
+        overflow: hidden;
+        color: #102D4D;
+        margin: 1rem 0;
+    }
+    th {
+        background-color: #F0F4FA !important;
+        color: #102D4D !important;
+        font-weight: 700 !important;
+        border-bottom: 2px solid #4072AF !important;
+        padding: 8px 12px !important;
+    }
+    td {
+        color: #102D4D !important;
+        border-bottom: 1px solid #DAE2EF !important;
+        padding: 8px 12px !important;
+    }
+    tr:nth-child(even) {
+        background-color: #F8FAFD;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -537,7 +600,7 @@ with tab1:
         <div class="hpc-card">
             <span class="hpc-badge badge-slate">AOS LAYOUT | SCALAR LIBM</span>
             <div class="hpc-card-title">1. Scalar C++ Baseline</div>
-            <div class="hpc-card-val">3.84 <span style="font-size:1.1rem; color:#DAE2EF;">Mcps</span></div>
+            <div class="hpc-card-val">3.84 <span style="font-size:1.1rem; color:#4072AF;">Mcps</span></div>
             <div class="hpc-card-sub">Median: 2.61 ms | Speedup: 1.00× (Base)</div>
         </div>
         """, unsafe_allow_html=True)
@@ -546,7 +609,7 @@ with tab1:
         <div class="hpc-card-autovec">
             <span class="hpc-badge badge-cyan">SOA 32B ALIGNED | GCC -O3</span>
             <div class="hpc-card-title">2. Compiler Auto-Vectorization</div>
-            <div class="hpc-card-val">5.49 <span style="font-size:1.1rem; color:#DAE2EF;">Mcps</span></div>
+            <div class="hpc-card-val">5.49 <span style="font-size:1.1rem; color:#4072AF;">Mcps</span></div>
             <div class="hpc-card-sub hpc-card-sub-green">Median: 1.82 ms | Speedup: 1.43×</div>
         </div>
         """, unsafe_allow_html=True)
@@ -555,7 +618,7 @@ with tab1:
         <div class="hpc-card-avx2">
             <span class="hpc-badge badge-red">256-BIT YMM | IN-REGISTER MINIMAX</span>
             <div class="hpc-card-title">3. Manual AVX2 SIMD Engine</div>
-            <div class="hpc-card-val hpc-card-val-red">47.28 <span style="font-size:1.1rem; color:#F9F7F8;">Mcps</span></div>
+            <div class="hpc-card-val hpc-card-val-red">47.28 <span style="font-size:1.1rem; color:#102D4D;">Mcps</span></div>
             <div class="hpc-card-sub hpc-card-sub-red">Median: 0.21 ms | Speedup: 12.32× 🚀</div>
         </div>
         """, unsafe_allow_html=True)
@@ -729,7 +792,7 @@ with tab2:
         lum_orig = r * 0.299 + g * 0.587 + b * 0.114
         text_color_orig = "white" if lum_orig < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold; box-shadow: 0 4px 14px rgba(0,0,0,0.35);">
+        <div style="background-color: {color_pick}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_orig}; font-weight: bold; box-shadow: 0 4px 14px rgba(16, 45, 77, 0.12);">
             {color_pick} (100%)
         </div>
         """, unsafe_allow_html=True)
@@ -739,7 +802,7 @@ with tab2:
         lum_mod = rgb_mod[0] * 0.299 + rgb_mod[1] * 0.587 + rgb_mod[2] * 0.114
         text_color_mod = "white" if lum_mod < 0.5 else "black"
         st.markdown(f"""
-        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold; box-shadow: 0 4px 14px rgba(0,0,0,0.35);">
+        <div style="background-color: {mod_hex}; height: 75px; border-radius: 8px; border: 2px solid #DAE2EF; display: flex; align-items: center; justify-content: center; color: {text_color_mod}; font-weight: bold; box-shadow: 0 4px 14px rgba(16, 45, 77, 0.12);">
             {mod_hex}
         </div>
         """, unsafe_allow_html=True)
